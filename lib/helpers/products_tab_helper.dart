@@ -7,7 +7,7 @@ Future<List<Category>> getCategories() async {
   List<Category> categories = [];
   snapshot.documents.forEach((doc) {
     categories
-        .add(Category(doc.data["title"], doc.data["iconUrl"], doc.documentID));
+        .add(Category(doc.data["title"], doc.data["icon"], doc.documentID));
   });
   return categories;
 }

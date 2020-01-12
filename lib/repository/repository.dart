@@ -1,10 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 const HOME = "home";
 const POS = "pos";
 const CATEGORIES = "categories";
 const CATEGORIES_ID = "categoriesId";
 const PRODUCTS = "products";
+const PRODUCTS_STORAGE_PATH = "Products";
 
 Future<QuerySnapshot> getTrendImagesFirebase() async {
   return await Firestore.instance.collection(HOME).orderBy(POS).getDocuments();
@@ -21,4 +23,12 @@ Future<QuerySnapshot> getProductsFirebase({String categoryId}) async {
           .collection(PRODUCTS)
           .where(CATEGORIES_ID, isEqualTo: categoryId)
           .getDocuments();
+}
+
+Future<String> getProductImageUrlFirebase(String imageFile) async {
+  final ref = FirebaseStorage.instance
+      .ref()
+      .child(PRODUCTS_STORAGE_PATH)
+      .child(imageFile);
+  return await ref.getDownloadURL() as String;
 }

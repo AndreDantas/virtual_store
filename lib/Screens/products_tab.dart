@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:virtual_store/helpers/products_tab_helper.dart';
 import 'package:virtual_store/data/category.dart';
+import 'package:virtual_store/tiles/category_tile.dart';
 
 class ProductsTab extends StatefulWidget {
   @override
@@ -19,7 +20,15 @@ class _ProductsTabState extends State<ProductsTab> {
             return Center(child: CircularProgressIndicator());
           default:
             if (snapshot.hasData) {
-              return ListView();
+              var dividedTiles = ListTile.divideTiles(
+                      tiles: snapshot.data
+                          .map((category) => CategoryTile(category))
+                          .toList(),
+                      color: Colors.grey[500])
+                  .toList();
+              return ListView(
+                children: dividedTiles,
+              );
             } else {
               return Center(
                 child: Text(
