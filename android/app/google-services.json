@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "388914643311",
+    "firebase_url": "https://storeflutter-a55f6.firebaseio.com",
+    "project_id": "storeflutter-a55f6",
+    "storage_bucket": "storeflutter-a55f6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:388914643311:android:d1c5da9c03999fb92e689a",
+        "android_client_info": {
+          "package_name": "br.com.dantas.virtual_store"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "388914643311-ah9qp8ee55nv60ds36jfcdpq05s7s7go.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCGfNyLlP9BEc3sWfuXu0v1ew3zCp7IeGQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "388914643311-ah9qp8ee55nv60ds36jfcdpq05s7s7go.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
