@@ -17,8 +17,8 @@ class HomeTab extends StatelessWidget {
         buildLinearGradient(
             _backgroundColor,
             Colors.white, //colorRGB(253, 181, 168),
-            Alignment.topLeft,
-            Alignment.bottomRight),
+            Alignment.topCenter,
+            Alignment.bottomCenter),
         CustomScrollView(
           slivers: <Widget>[
             SliverAppBar(
@@ -34,33 +34,43 @@ class HomeTab extends StatelessWidget {
             FutureBuilder<List<TrendImage>>(
               future: getTrendImages(),
               builder: (context, snapshot) {
-                if (!snapshot.hasData)
-                  return SliverToBoxAdapter(
-                    child: Container(
-                      height: 200.0,
-                      alignment: Alignment.center,
-                      child: CircularProgressIndicator(
-                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                switch (snapshot.connectionState) {
+                  case ConnectionState.none:
+                  case ConnectionState.waiting:
+                    return SliverToBoxAdapter(
+                      child: Container(
+                        height: 200.0,
+                        alignment: Alignment.center,
+                        child: CircularProgressIndicator(
+                          valueColor:
+                              AlwaysStoppedAnimation<Color>(Colors.white),
+                        ),
                       ),
-                    ),
-                  );
-                else {
-                  return SliverStaggeredGrid.count(
-                    crossAxisCount: 2,
-                    mainAxisSpacing: 1.0,
-                    crossAxisSpacing: 1.0,
-                    staggeredTiles: snapshot.data
-                        .map((trendImg) =>
-                            StaggeredTile.count(trendImg.x, trendImg.y))
-                        .toList(),
-                    children: snapshot.data
-                        .map((trendImg) => FadeInImage.memoryNetwork(
-                              placeholder: kTransparentImage,
-                              image: trendImg.imageUrl,
-                              fit: BoxFit.cover,
-                            ))
-                        .toList(),
-                  );
+                    );
+                    break;
+                  default:
+                    if (!snapshot.hasData) {
+                      return Center(
+                        child: Text("Failed to load images"),
+                      );
+                    } else {
+                      return SliverStaggeredGrid.count(
+                        crossAxisCount: 2,
+                        mainAxisSpacing: 1.0,
+                        crossAxisSpacing: 1.0,
+                        staggeredTiles: snapshot.data
+                            .map((trendImg) =>
+                                StaggeredTile.count(trendImg.x, trendImg.y))
+                            .toList(),
+                        children: snapshot.data
+                            .map((trendImg) => FadeInImage.memoryNetwork(
+                                  placeholder: kTransparentImage,
+                                  image: trendImg.imageUrl,
+                                  fit: BoxFit.cover,
+                                ))
+                            .toList(),
+                      );
+                    }
                 }
               },
             )

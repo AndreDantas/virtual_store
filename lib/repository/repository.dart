@@ -4,7 +4,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 const HOME = "home";
 const POS = "pos";
 const CATEGORIES = "categories";
-const CATEGORIES_ID = "categoriesId";
+const CATEGORY_ID = "categoryId";
 const PRODUCTS = "products";
 const PRODUCTS_STORAGE_PATH = "Products";
 
@@ -21,7 +21,7 @@ Future<QuerySnapshot> getProductsFirebase({String categoryId}) async {
       ? await Firestore.instance.collection(PRODUCTS).getDocuments()
       : await Firestore.instance
           .collection(PRODUCTS)
-          .where(CATEGORIES_ID, isEqualTo: categoryId)
+          .where(CATEGORY_ID, isEqualTo: categoryId)
           .getDocuments();
 }
 

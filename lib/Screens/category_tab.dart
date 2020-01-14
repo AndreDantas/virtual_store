@@ -72,7 +72,7 @@ class _CategoryTabState extends State<CategoryTab> {
               } else {
                 return Center(
                   child: Text(
-                    "Failed to load categories.",
+                    "Failed to load products.",
                     style: TextStyle(fontSize: 18.0, color: Colors.grey[700]),
                   ),
                 );
