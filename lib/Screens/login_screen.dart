@@ -10,9 +10,11 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        key: _scaffoldKey,
         appBar: AppBar(
           title: Text("Log in"),
           actions: <Widget>[
@@ -38,11 +40,31 @@ class _LoginScreenState extends State<LoginScreen> {
             }
             return SimpleLogin(
               (email, password) {
-                model.signIn();
+                model.signIn(email, password, _onSuccess, _onFailed);
               },
               forgotPasswordCallback: () {},
+              passwordValidator: (password) {
+                if (password == null || password.isEmpty)
+                  return "Password is required";
+
+                return password.length < 8
+                    ? "Password must be at least 8 characters"
+                    : null;
+              },
             );
           },
         ));
+  }
+
+  _onSuccess() {
+    Navigator.of(context).pop();
+  }
+
+  _onFailed() {
+    _scaffoldKey.currentState.showSnackBar(SnackBar(
+      content: Text("Failed to log in"),
+      backgroundColor: Colors.redAccent,
+      duration: Duration(seconds: 2),
+    ));
   }
 }

@@ -5,21 +5,25 @@ import 'package:flutter/cupertino.dart';
 class User {
   final String id;
   final String name;
+  final String email;
   final String address;
   User({
     @required this.id,
     @required this.name,
+    @required this.email,
     @required this.address,
   });
 
   User copyWith({
     String id,
     String name,
+    String email,
     String address,
   }) {
     return User(
       id: id ?? this.id,
       name: name ?? this.name,
+      email: email ?? this.email,
       address: address ?? this.address,
     );
   }
@@ -28,6 +32,7 @@ class User {
     return {
       'id': id,
       'name': name,
+      'email': email,
       'address': address,
     };
   }
@@ -38,6 +43,7 @@ class User {
     return User(
       id: map['id'],
       name: map['name'],
+      email: map['email'],
       address: map['address'],
     );
   }
@@ -47,15 +53,23 @@ class User {
   static User fromJson(String source) => fromMap(json.decode(source));
 
   @override
-  String toString() => 'User id: $id, name: $name, address: $address';
+  String toString() {
+    return 'User id: $id, name: $name, email: $email, address: $address';
+  }
 
   @override
   bool operator ==(Object o) {
     if (identical(this, o)) return true;
 
-    return o is User && o.id == id && o.name == name && o.address == address;
+    return o is User &&
+        o.id == id &&
+        o.name == name &&
+        o.email == email &&
+        o.address == address;
   }
 
   @override
-  int get hashCode => id.hashCode ^ name.hashCode ^ address.hashCode;
+  int get hashCode {
+    return id.hashCode ^ name.hashCode ^ email.hashCode ^ address.hashCode;
+  }
 }

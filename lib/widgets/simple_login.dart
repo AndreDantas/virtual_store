@@ -104,7 +104,7 @@ class _SimpleLoginState extends State<SimpleLogin> {
                     setState(() {
                       _validPassword = this.widget.passwordValidator == null
                           ? _validatePassword(text) == null
-                          : this.widget.passwordValidator(text);
+                          : this.widget.passwordValidator(text) == null;
                     });
                   },
                   validator: this.widget.passwordValidator ?? _validatePassword,

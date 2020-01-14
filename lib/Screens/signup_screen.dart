@@ -10,6 +10,7 @@ class SignUpScreen extends StatefulWidget {
 
 class _SignUpScreenState extends State<SignUpScreen> {
   final _formKey = GlobalKey<FormState>();
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   bool _passwordFocus = false;
   bool _showPassword = false;
 
@@ -34,27 +35,32 @@ class _SignUpScreenState extends State<SignUpScreen> {
   String validatePassword(String password) {
     if (password == null || password.isEmpty) return "Password is required";
 
-    return password.length < 6
-        ? "Password must be at least 6 characters"
+    return password.length < 8
+        ? "Password must be at least 8 characters"
         : null;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         title: Text("Sign Up"),
         centerTitle: true,
       ),
-      body: ScopedModelDescendant<UserModel>(
-        builder: (context, child, model) => Form(
+      body: ScopedModelDescendant<UserModel>(builder: (context, child, model) {
+        if (model.isLoading)
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        return Form(
           key: _formKey,
           child: Center(
             child: ListView(
               padding: EdgeInsets.all(16.0),
               children: <Widget>[
                 TextFormField(
-                  controller: _nameController;
+                  controller: _nameController,
                   validator: (text) => text.isEmpty ? "Name is required" : null,
                   decoration: InputDecoration(hintText: "Name"),
                 ),
@@ -62,6 +68,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   height: 16.0,
                 ),
                 TextFormField(
+                  controller: _addressController,
                   validator: (text) =>
                       text.isEmpty ? "Address is required" : null,
                   decoration: InputDecoration(hintText: "Address"),
@@ -70,6 +77,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   height: 16.0,
                 ),
                 TextFormField(
+                  controller: _emailController,
                   inputFormatters: [
                     BlacklistingTextInputFormatter(new RegExp("[ ]"))
                   ],
@@ -89,6 +97,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       });
                     },
                     child: TextFormField(
+                      controller: _passwordController,
                       inputFormatters: [
                         BlacklistingTextInputFormatter(new RegExp("[ ]"))
                       ],
@@ -128,7 +137,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   child: RaisedButton(
                     onPressed: () {
                       if (_formKey.currentState.validate()) {
-                        model.signUp(userData, password, onSuccess, onFailed);
+                        Map<String, dynamic> data = {
+                          "name": _nameController.text,
+                          "address": _addressController.text,
+                          "email": _emailController.text
+                        };
+                        model.signUp(data, _passwordController.text, _onSuccess,
+                            _onFailed);
                       }
                     },
                     textColor: Colors.white,
@@ -142,8 +157,28 @@ class _SignUpScreenState extends State<SignUpScreen> {
               ],
             ),
           ),
-        ),
-      ),
+        );
+      }),
     );
+  }
+
+  _onSuccess() {
+    _scaffoldKey.currentState.showSnackBar(SnackBar(
+      content: Text("User created"),
+      backgroundColor: Theme.of(context).primaryColor,
+      duration: Duration(seconds: 2),
+    ));
+
+    Future.delayed(Duration(seconds: 2)).then((_) {
+      Navigator.of(context).pop();
+    });
+  }
+
+  _onFailed() {
+    _scaffoldKey.currentState.showSnackBar(SnackBar(
+      content: Text("Failed to create user"),
+      backgroundColor: Colors.redAccent,
+      duration: Duration(seconds: 2),
+    ));
   }
 }
