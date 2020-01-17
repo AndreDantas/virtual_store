@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:virtual_store/Screens/recover_pass.dart';
 import 'package:virtual_store/Screens/signup_screen.dart';
 import 'package:virtual_store/models/user_model.dart';
+import 'package:virtual_store/widgets/darken_background_loading.dart';
 import 'package:virtual_store/widgets/simple_login.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -33,24 +35,31 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
         body: ScopedModelDescendant<UserModel>(
           builder: (context, child, model) {
-            if (model.isLoading) {
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-            return SimpleLogin(
-              (email, password) {
-                model.signIn(email, password, _onSuccess, _onFailed);
-              },
-              forgotPasswordCallback: () {},
-              passwordValidator: (password) {
-                if (password == null || password.isEmpty)
-                  return "Password is required";
-
-                return password.length < 8
-                    ? "Password must be at least 8 characters"
-                    : null;
-              },
+            return Stack(
+              children: <Widget>[
+                SimpleLogin(
+                  (email, password) {
+                    model.signIn(email, password, _onSuccess, _onFailed);
+                  },
+                  forgotPasswordCallback: () {
+                    Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => RecoverPass()));
+                  },
+                  passwordValidator: (password) {
+                    if (password == null || password.isEmpty)
+                      return "Password is required";
+                    final passLength = 8;
+                    return password.length < passLength
+                        ? "Password must be at least $passLength characters"
+                        : null;
+                  },
+                ),
+                model.isLoading()
+                    ? DarkenBackgroundLoading(
+                        loadingColor: Theme.of(context).primaryColor,
+                      )
+                    : Container()
+              ],
             );
           },
         ));

@@ -7,7 +7,7 @@ class Product {
   final List<String> images;
   final List<String> sizes;
   final String categoryId;
-  final String id;
+  String id;
   Product({
     this.name,
     this.description,
@@ -47,6 +47,15 @@ class Product {
       'sizes': List<dynamic>.from(sizes.map((x) => x)),
       'categoryId': categoryId,
       'id': id,
+    };
+  }
+
+  Map<String, dynamic> toResumedMap() {
+    return {
+      'id': id,
+      'name': name,
+      'description': description,
+      'price': price,
     };
   }
 

@@ -7,8 +7,18 @@ Future<List<Product>> getProductsFromCategory(Category category) async {
   List<Product> products = [];
 
   snapshot.documents.forEach((doc) {
-    products.add(Product.fromMap(doc.data));
+    Product p = Product.fromMap(doc.data);
+    p.id = doc.documentID;
+    products.add(p);
   });
 
   return products;
+}
+
+Future<Product> getProduct(String productId) async {
+  final doc = await getProductFirebase(productId);
+  if (doc == null) return null;
+  Product p = Product.fromMap(doc.data);
+  p.id = doc.documentID;
+  return p;
 }

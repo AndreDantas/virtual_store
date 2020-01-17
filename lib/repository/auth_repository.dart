@@ -3,8 +3,16 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 const USERS = "users";
 Future<FirebaseUser> createFirebaseUser(String email, String password) async {
-  return await FirebaseAuth.instance
-      .createUserWithEmailAndPassword(email: email, password: password);
+  FirebaseUser firebaseUser;
+  await FirebaseAuth.instance
+      .createUserWithEmailAndPassword(email: email, password: password)
+      .then((user) {
+    if (user != null) firebaseUser = user;
+  }).catchError((e) {
+    firebaseUser = null;
+  });
+
+  return firebaseUser;
 }
 
 Future<Null> saveUserDataFirebase(
@@ -17,8 +25,16 @@ Future<Null> signOutFirebaseUser() async {
 }
 
 Future<FirebaseUser> signInFirebaseUser(String email, String password) async {
-  return await FirebaseAuth.instance
-      .signInWithEmailAndPassword(email: email, password: password);
+  FirebaseUser firebaseUser;
+  await FirebaseAuth.instance
+      .signInWithEmailAndPassword(email: email, password: password)
+      .then((user) {
+    if (user != null) firebaseUser = user;
+  }).catchError((e) {
+    firebaseUser = null;
+  });
+
+  return firebaseUser;
 }
 
 Future<DocumentSnapshot> getCurrentUserDataFirebase() async {

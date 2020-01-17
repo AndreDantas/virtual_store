@@ -1,11 +1,15 @@
+import 'package:flutter/cupertino.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:virtual_store/data/user.dart';
 import 'package:virtual_store/helpers/auth_helper.dart';
 
 class UserModel extends Model {
-  bool isLoading = false;
-
+  bool isLoading() => _loading;
+  bool _loading = false;
   User _user;
+
+  static UserModel of(BuildContext context) =>
+      ScopedModel.of<UserModel>(context);
 
   User getUser() {
     if (_user == null)
@@ -26,9 +30,9 @@ class UserModel extends Model {
     _user = await createUser(userData, password);
 
     if (_user != null) {
-      onSuccess();
+      if (onSuccess != null) onSuccess();
     } else {
-      onFailed();
+      if (onFailed != null) onFailed();
     }
     _stopLoading();
   }
@@ -39,10 +43,11 @@ class UserModel extends Model {
 
     _user = await signInUser(email, password);
 
-    if (_user != null)
-      onSuccess();
-    else
-      onFailed();
+    if (_user != null) {
+      if (onSuccess != null) onSuccess();
+    } else {
+      if (onFailed != null) onFailed();
+    }
 
     _stopLoading();
   }
@@ -55,16 +60,18 @@ class UserModel extends Model {
   }
 
   void _startLoading() {
-    isLoading = true;
+    _loading = true;
     notifyListeners();
   }
 
   void _stopLoading() {
-    isLoading = false;
+    _loading = false;
     notifyListeners();
   }
 
-  void recoverPass() {}
+  void recoverPass(String email) {
+    sendPasswordResetEmail(email);
+  }
 
   bool isLoggedIn() {
     return _user != null;

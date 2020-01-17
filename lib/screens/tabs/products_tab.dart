@@ -26,8 +26,13 @@ class _ProductsTabState extends State<ProductsTab> {
                           .toList(),
                       color: Colors.grey[500])
                   .toList();
-              return ListView(
-                children: dividedTiles,
+              return RefreshIndicator(
+                onRefresh: () async {
+                  setState(() {});
+                },
+                child: ListView(
+                  children: dividedTiles,
+                ),
               );
             } else {
               return Center(

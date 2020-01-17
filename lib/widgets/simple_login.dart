@@ -44,9 +44,9 @@ class _SimpleLoginState extends State<SimpleLogin> {
 
   String _validatePassword(String password) {
     if (password == null || password.isEmpty) return "Password is required";
-
-    return password.length < 6
-        ? "Password must be at least 6 characters"
+    final passLength = 8;
+    return password.length < passLength
+        ? "Password must be at least $passLength characters"
         : null;
   }
 

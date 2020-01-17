@@ -1,6 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
+const USERS = "users";
+const CART = "cart";
+const ORDERS = "orders";
+const COUPONS = "coupons";
 const HOME = "home";
 const POS = "pos";
 const CATEGORIES = "categories";
@@ -25,10 +29,98 @@ Future<QuerySnapshot> getProductsFirebase({String categoryId}) async {
           .getDocuments();
 }
 
+Future<DocumentSnapshot> getProductFirebase(String productId) async {
+  return await Firestore.instance
+      .collection(PRODUCTS)
+      .document(productId)
+      .get();
+}
+
 Future<String> getProductImageUrlFirebase(String imageFile) async {
   final ref = FirebaseStorage.instance
       .ref()
       .child(PRODUCTS_STORAGE_PATH)
       .child(imageFile);
   return await ref.getDownloadURL() as String;
+}
+
+Future<DocumentReference> addCartItemFirebase(
+    String userId, Map<String, dynamic> cartItemData) async {
+  return await Firestore.instance
+      .collection(USERS)
+      .document(userId)
+      .collection(CART)
+      .add(cartItemData);
+}
+
+Future<bool> removeCartItemFirebase(String userId, String cartItemId) async {
+  bool result = true;
+  await Firestore.instance
+      .collection(USERS)
+      .document(userId)
+      .collection(CART)
+      .document(cartItemId)
+      .delete()
+      .catchError((e) {
+    result = false;
+  });
+
+  return result;
+}
+
+Future<bool> updateCartItemDataFirebase(
+    String userId, String cartItemId, Map<String, dynamic> cartItemData) async {
+  bool result = true;
+  await Firestore.instance
+      .collection(USERS)
+      .document(userId)
+      .collection(CART)
+      .document(cartItemId)
+      .updateData(cartItemData)
+      .catchError((e) {
+    result = false;
+  });
+
+  return result;
+}
+
+Future<QuerySnapshot> getCartItemsFirebase(String userId) async {
+  return await Firestore.instance
+      .collection(USERS)
+      .document(userId)
+      .collection(CART)
+      .getDocuments();
+}
+
+Future<DocumentReference> saveOrderFirebase(Map<String, dynamic> order) async {
+  return await Firestore.instance.collection(ORDERS).add(order);
+}
+
+Future<DocumentSnapshot> getCouponFirebase(String couponName) async {
+  return await Firestore.instance
+      .collection(COUPONS)
+      .document(couponName)
+      .get();
+}
+
+Future<Null> saveUserOrderFirebase(String orderId, String userId) async {
+  return await Firestore.instance
+      .collection(USERS)
+      .document(userId)
+      .collection(ORDERS)
+      .document(orderId)
+      .setData({"orderId": orderId});
+}
+
+Future<Null> emptyUserCartFirebase(String userId) async {
+  return await Firestore.instance
+      .collection(USERS)
+      .document(userId)
+      .collection(CART)
+      .getDocuments()
+      .then((snapshot) {
+    for (DocumentSnapshot doc in snapshot.documents) {
+      doc.reference.delete();
+    }
+  });
 }

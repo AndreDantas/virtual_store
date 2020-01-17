@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:virtual_store/data/user.dart';
 import 'package:virtual_store/repository/auth_repository.dart';
 
@@ -35,4 +36,8 @@ Future<User> getCurrentUserData() async {
         email: userDoc.data["email"],
         address: userDoc.data["address"]);
   return null;
+}
+
+sendPasswordResetEmail(String email) {
+  FirebaseAuth.instance.sendPasswordResetEmail(email: email);
 }

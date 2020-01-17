@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:virtual_store/Screens/category_tab.dart';
+import 'package:virtual_store/screens/category_screen.dart';
 import 'package:virtual_store/data/category.dart';
 
 class CategoryTile extends StatelessWidget {
@@ -17,7 +17,7 @@ class CategoryTile extends StatelessWidget {
       trailing: Icon(Icons.keyboard_arrow_right),
       onTap: () {
         Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => CategoryTab(category)));
+            MaterialPageRoute(builder: (context) => CategoryScreen(category)));
       },
     );
   }
