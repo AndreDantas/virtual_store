@@ -29,9 +29,31 @@ class _OrdersTabState extends State<OrdersTab> {
                   return ListView(
                       children: snapshot.data
                           .map((order) => OrderTile(order))
+                          .toList()
+                          .reversed
                           .toList());
                 } else {
-                  return Container();
+                  return Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Icon(
+                          Icons.playlist_add_check,
+                          size: 80.0,
+                          color: Theme.of(context).primaryColor,
+                        ),
+                        SizedBox(
+                          height: 16.0,
+                        ),
+                        Text(
+                          "You don't have any orders.",
+                          style: TextStyle(
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ]);
                 }
             }
           });

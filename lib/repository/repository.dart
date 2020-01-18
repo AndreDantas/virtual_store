@@ -9,6 +9,7 @@ const COUPONS = "coupons";
 const HOME = "home";
 const PRODUCTS = "products";
 const CATEGORIES = "categories";
+const STORES = "stores";
 
 const CLIENT_ID = "clientId";
 const ORDER_ID = "orderId";
@@ -138,4 +139,8 @@ Future<Null> emptyUserCartFirebase(String userId) async {
 
 Stream<DocumentSnapshot> getOrderStatusStreamFirebase(String orderId) {
   return Firestore.instance.collection(ORDERS).document(orderId).snapshots();
+}
+
+Future<QuerySnapshot> getStoresFirebase() async {
+  return await Firestore.instance.collection(STORES).getDocuments();
 }

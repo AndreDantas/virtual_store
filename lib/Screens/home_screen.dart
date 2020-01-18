@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:virtual_store/screens/tabs/home_tab.dart';
 import 'package:virtual_store/screens/tabs/orders_tab.dart';
 import 'package:virtual_store/screens/tabs/products_tab.dart';
+import 'package:virtual_store/screens/tabs/stores_tab.dart';
 import 'package:virtual_store/widgets/cart_button.dart';
 import 'package:virtual_store/widgets/custom_drawer.dart';
 import '../extensions.dart';
@@ -47,9 +48,9 @@ class _HomeScreenState extends State<HomeScreen> {
               title: Text("Stores"),
               centerTitle: true,
             ),
-            body: Container(),
+            body: StoresTab(),
             drawer: CustomDrawer(_pageController),
-            floatingActionButton: CartButton(),
+            //floatingActionButton: CartButton(),
           ),
           Scaffold(
             appBar: AppBar(

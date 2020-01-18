@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:virtual_store/Screens/login_screen.dart';
 import 'package:virtual_store/models/user_model.dart';
+import 'package:virtual_store/screens/cart_screen.dart';
 import 'package:virtual_store/tiles/drawer_tile.dart';
 
 import '../extensions.dart';
@@ -87,6 +88,33 @@ class CustomDrawer extends StatelessWidget {
               DrawerTile(Icons.location_on, "Stores", _pageController, 2),
               DrawerTile(
                   Icons.playlist_add_check, "My Orders", _pageController, 3),
+              Material(
+                color: Colors.transparent,
+                child: InkWell(
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => CartScreen()));
+                  },
+                  child: Container(
+                    height: 60.0,
+                    child: Row(
+                      children: <Widget>[
+                        Icon(Icons.shopping_cart,
+                            size: 32.0, color: Colors.grey[700]),
+                        SizedBox(
+                          width: 32.0,
+                        ),
+                        Text(
+                          "My Cart",
+                          style: TextStyle(
+                              fontSize: 16.0, color: Colors.grey[700]),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              )
             ],
           )
         ],
