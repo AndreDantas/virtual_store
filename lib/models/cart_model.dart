@@ -26,6 +26,7 @@ class CartModel extends Model {
   void setCoupon(String coupon, double discount) {
     couponCode = coupon;
     this._discount = discount;
+    notifyListeners();
   }
 
   void update() {
@@ -109,13 +110,14 @@ class CartModel extends Model {
       {void Function() onSuccess, void Function() onFailed}) async {
     _startLoading();
     final user = userModel.getUser();
-    if (user == null) return;
-    final cartItems = await getCartItems(user.id);
-    if (cartItems == null) {
-      if (onFailed != null) onFailed();
-    } else {
-      this.items = cartItems;
-      if (onSuccess != null) onSuccess();
+    if (user != null) {
+      final cartItems = await getCartItems(user.id);
+      if (cartItems == null) {
+        if (onFailed != null) onFailed();
+      } else {
+        this.items = cartItems;
+        if (onSuccess != null) onSuccess();
+      }
     }
     _stopLoading();
   }
@@ -143,19 +145,21 @@ class CartModel extends Model {
     final userId = userModel.getUser().id;
     final order = Order(
         clientId: userId,
-        discountPrice: discount,
         products: items,
         productsPrice: productPrices,
+        discountPrice: discount,
         shippingPrice: shipping,
-        totalPrice: total);
+        totalPrice: total,
+        status: 1);
 
     final orderId = await saveOrder(order);
     if (orderId != null) {
       order.id = orderId;
-      await emptyUserCart(userId);
-      await saveUserOrder(orderId, userId);
+      items.clear();
       discount = null;
       couponCode = null;
+      await emptyUserCart(userId);
+      await saveUserOrder(orderId, userId);
     }
 
     _stopLoading();

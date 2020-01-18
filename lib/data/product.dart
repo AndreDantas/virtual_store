@@ -52,7 +52,7 @@ class Product {
 
   Map<String, dynamic> toResumedMap() {
     return {
-      'id': id,
+      //'id': id,
       'name': name,
       'description': description,
       'price': price,
@@ -65,11 +65,11 @@ class Product {
     return Product(
       name: map['name'],
       description: map['description'],
-      price: map['price'] + 0.0,
-      images: List<String>.from(map['images']),
-      sizes: List<String>.from(map['sizes']),
+      price: map['price'],
+      images: map['images'] != null ? List<String>.from(map['images']) : [""],
+      sizes: map['sizes'] != null ? List<String>.from(map['sizes']) : [""],
       categoryId: map['categoryId'],
-      id: map['id'],
+      //id: map['id'],
     );
   }
 

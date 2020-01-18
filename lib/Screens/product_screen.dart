@@ -142,7 +142,8 @@ class _ProductScreenState extends State<ProductScreen> {
                                 color: UserModel.of(context).isLoggedIn()
                                     ? Colors.green
                                     : Theme.of(context).primaryColor,
-                                onPressed: this._size.isNotEmpty
+                                onPressed: this._size.isNotEmpty ||
+                                        !UserModel.of(context).isLoggedIn()
                                     ? () {
                                         addToCart(product);
                                       }
@@ -188,6 +189,7 @@ class _ProductScreenState extends State<ProductScreen> {
   void addToCart(Product product) {
     if (UserModel.of(context).isLoggedIn()) {
       CartItem item = CartItem(productId: product.id, size: _size, quantity: 1);
+      item.product = product;
       CartModel.of(context).addProduct(item, _onSuccess, _onFailed);
     } else {
       Navigator.of(context)

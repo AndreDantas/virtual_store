@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
+
 import 'package:virtual_store/data/cart_item.dart';
 
 class Order {
@@ -20,7 +21,7 @@ class Order {
     @required this.shippingPrice,
     @required this.discountPrice,
     @required this.totalPrice,
-    this.status,
+    this.status = 0,
   });
 
   Order copyWith({
@@ -49,7 +50,7 @@ class Order {
     return {
       //'id': id,
       'clientId': clientId,
-      'products': products.map((x) => x.toMap()).toList(),
+      'products': List<dynamic>.from(products.map((x) => x.toMap())),
       'productsPrice': productsPrice,
       'shippingPrice': shippingPrice,
       'discountPrice': discountPrice,
@@ -60,12 +61,11 @@ class Order {
 
   static Order fromMap(Map<String, dynamic> map) {
     if (map == null) return null;
-
     return Order(
-      id: map['id'],
+      //id: map['id'],
       clientId: map['clientId'],
-      products:
-          List<CartItem>.from(map['products']?.map((x) => CartItem.fromMap(x))),
+      products: List<CartItem>.from(
+          map['products']?.map((x) => CartItem.fromMap(Map.from(x)))),
       productsPrice: map['productsPrice'],
       shippingPrice: map['shippingPrice'],
       discountPrice: map['discountPrice'],

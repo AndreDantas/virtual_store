@@ -32,8 +32,8 @@ Future<bool> updateCartItemData(String userId, CartItem cartItem) async {
 
 Future<double> getCouponDiscount(String couponName) async {
   final doc = await getCouponFirebase(couponName);
-  if (doc == null) return null;
-  return double.tryParse(doc?.data["discount"]);
+  if (doc == null || doc.data == null) return null;
+  return doc?.data["discount"] + 0.0;
 }
 
 Future<String> saveOrder(Order order) async {

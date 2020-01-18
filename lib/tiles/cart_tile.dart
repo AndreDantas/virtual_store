@@ -38,8 +38,9 @@ class _CartTileState extends State<CartTile> {
                         ));
                   default:
                     if (snapshot.hasData) {
-                      CartModel.of(context).update();
                       _cartItem.product = snapshot.data;
+                      CartModel.of(context).update();
+
                       return buildCartItem(context);
                     }
                     return Container(
@@ -64,7 +65,7 @@ class _CartTileState extends State<CartTile> {
         Container(
             padding: EdgeInsets.all(8.0),
             width: 100.0,
-            child: Image.network(product.images[0])),
+            child: Image.network(product?.images[0] ?? "")),
         Expanded(
           child: Container(
             padding: EdgeInsets.all(8.0),

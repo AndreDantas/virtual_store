@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:virtual_store/screens/tabs/home_tab.dart';
+import 'package:virtual_store/screens/tabs/orders_tab.dart';
 import 'package:virtual_store/screens/tabs/products_tab.dart';
 import 'package:virtual_store/widgets/cart_button.dart';
 import 'package:virtual_store/widgets/custom_drawer.dart';
@@ -41,6 +42,24 @@ class _HomeScreenState extends State<HomeScreen> {
             drawer: CustomDrawer(_pageController),
             floatingActionButton: CartButton(),
           ),
+          Scaffold(
+            appBar: AppBar(
+              title: Text("Stores"),
+              centerTitle: true,
+            ),
+            body: Container(),
+            drawer: CustomDrawer(_pageController),
+            floatingActionButton: CartButton(),
+          ),
+          Scaffold(
+            appBar: AppBar(
+              title: Text("My Orders"),
+              centerTitle: true,
+            ),
+            body: OrdersTab(),
+            drawer: CustomDrawer(_pageController),
+            //floatingActionButton: CartButton(),
+          ),
         ],
         onPageChanged: onPageChanged,
         controller: _pageController,
@@ -64,7 +83,7 @@ class _HomeScreenState extends State<HomeScreen> {
           BottomNavigationBarItem(
               icon: Icon(Icons.store), title: Text("Store")),
           BottomNavigationBarItem(
-              icon: Icon(Icons.store), title: Text("Store")),
+              icon: Icon(Icons.playlist_add_check), title: Text("My Orders")),
         ],
       ),
     );

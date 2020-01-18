@@ -1,16 +1,20 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
+//Collections
 const USERS = "users";
 const CART = "cart";
 const ORDERS = "orders";
 const COUPONS = "coupons";
 const HOME = "home";
-const POS = "pos";
-const CATEGORIES = "categories";
-const CATEGORY_ID = "categoryId";
 const PRODUCTS = "products";
+const CATEGORIES = "categories";
+
+const CLIENT_ID = "clientId";
+const ORDER_ID = "orderId";
+const CATEGORY_ID = "categoryId";
 const PRODUCTS_STORAGE_PATH = "Products";
+const POS = "pos";
 
 Future<QuerySnapshot> getTrendImagesFirebase() async {
   return await Firestore.instance.collection(HOME).orderBy(POS).getDocuments();
@@ -109,7 +113,14 @@ Future<Null> saveUserOrderFirebase(String orderId, String userId) async {
       .document(userId)
       .collection(ORDERS)
       .document(orderId)
-      .setData({"orderId": orderId});
+      .setData({ORDER_ID: orderId});
+}
+
+Future<QuerySnapshot> getUserOrdersFirebase(String userId) async {
+  return await Firestore.instance
+      .collection(ORDERS)
+      .where(CLIENT_ID, isEqualTo: userId)
+      .getDocuments();
 }
 
 Future<Null> emptyUserCartFirebase(String userId) async {
@@ -123,4 +134,8 @@ Future<Null> emptyUserCartFirebase(String userId) async {
       doc.reference.delete();
     }
   });
+}
+
+Stream<DocumentSnapshot> getOrderStatusStreamFirebase(String orderId) {
+  return Firestore.instance.collection(ORDERS).document(orderId).snapshots();
 }

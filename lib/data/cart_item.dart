@@ -37,7 +37,7 @@ class CartItem {
       'quantity': quantity,
       'size': size,
       'productId': productId,
-      //'product': product?.toResumedMap(),
+      'product': product?.toMap(),
     };
   }
 
@@ -49,7 +49,7 @@ class CartItem {
       quantity: map['quantity'],
       size: map['size'],
       productId: map['productId'],
-      // product: Product.fromMap(map['product']),
+      product: Product.fromMap(Map.from(map['product'])),
     );
   }
 

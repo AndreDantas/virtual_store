@@ -4,6 +4,7 @@ import 'package:virtual_store/data/cart_item.dart';
 import 'package:virtual_store/models/cart_model.dart';
 import 'package:virtual_store/models/user_model.dart';
 import 'package:virtual_store/screens/login_screen.dart';
+import 'package:virtual_store/screens/order_screen.dart';
 import 'package:virtual_store/tiles/cart_tile.dart';
 import 'package:virtual_store/widgets/discount_card.dart';
 import 'package:virtual_store/widgets/order_summary.dart';
@@ -135,7 +136,13 @@ class _CartScreenState extends State<CartScreen> {
     );
   }
 
-  _onCompleteOrder() {}
+  void _onCompleteOrder() async {
+    final orderId = await CartModel.of(context).finishOrder();
+    if (orderId != null) {
+      Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => OrderScreen(orderId)));
+    }
+  }
 
   _onRemove(CartItem item) {
     this._scaffoldKey.currentState.showSnackBar(SnackBar(
